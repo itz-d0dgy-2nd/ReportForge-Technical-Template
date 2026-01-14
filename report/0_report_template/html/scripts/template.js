@@ -1,6 +1,6 @@
 window.onload = function() {
 
-  document.querySelectorAll('.severity-section-assessment td').forEach(tableData => {
+  document.querySelectorAll('.severity-matrix-section td').forEach(tableData => {
     const links = tableData.querySelectorAll('a');
     const itemCount = links.length; 
 
