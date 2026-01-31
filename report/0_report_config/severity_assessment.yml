@@ -1,22 +1,16 @@
 ConductSeverityAssessment: true
-FlipSeverityMatrix: false
+SwapImpactLikelihoodAxis: false
 DisplaySeverityBarGraph: true
 
-# Impact labels for the severity matrix (displayed as row/column headers depending on FlipSeverityMatrix) and findings
-# - Displayed in the severity assessment table in the report
-# - Defines and controls the impact names used in the findings markdown YAML front matter
-# - NOTE: Lists have implicit ordering, with the list position being the index (EG: Highest == 0)
+# Impact labels for the severity matrix and findings
 Impacts:
-  - "Severe"
-  - "Significant"
-  - "Moderate"
-  - "Minor"
   - "Minimal"
+  - "Minor"
+  - "Moderate"
+  - "Significant"
+  - "Severe"
 
-# Likelihood labels for the severity matrix (displayed as row/column headers depending on FlipSeverityMatrix) and findings
-# - Displayed in the severity assessment table in the report
-# - Defines and controls the impact names used in the findings markdown YAML front matter
-# - NOTE: Lists have implicit ordering, with the list position being the index (EG: Highest == 0)
+# Likelihood labels for the severity matrix and findings
 Likelihoods:
   - "Almost Never"
   - "Possible but Unlikely"
@@ -24,14 +18,13 @@ Likelihoods:
   - "Highly Probable"
   - "Almost Certain"
 
-# Severities labels for the ... Finish comment
-# - NOTE: Lists have implicit ordering, with the list position being the index (EG: Highest == 0)
+# Severities labels for the severity matrix and findings
 Severities:
-  - "Critical" 
-  - "High"      
+  - "Low"   
   - "Medium"    
-  - "Low"       
-
+  - "High"      
+  - "Critical" 
+    
 # Calculated severity matrix is used to determine finding severity based on the intersection of impact and likelihood
 # - Displayed in the severity assessment table in the report
 # - Defines and controls the severity matrix layout in the reports severity assessment
@@ -48,3 +41,4 @@ CalculatedMatrix:
  - ["Medium", "Medium", "Medium", "High", "High"]
  - ["Low", "Medium", "Medium", "Medium", "High"]
  - ["Low", "Low", "Medium", "Medium", "Medium"]
+
