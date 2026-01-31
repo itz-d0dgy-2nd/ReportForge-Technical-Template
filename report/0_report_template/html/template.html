@@ -59,13 +59,11 @@
         <table aria-label="Document metadata">
             <tbody>
                 <tr><th scope="row">Client:</th><td>{{ .MetadataConfig.Client }}</td></tr>
-                {{- range .MetadataConfig.DocumentInformation }}
-                {{- if .DocumentCurrent }}
+                {{- with index .MetadataConfig.DocumentInformation (sub (len .MetadataConfig.DocumentInformation) 1) }}
                 <tr><th scope="row">Document Status:</th><td>{{ .DocumentVersioning.DocumentStatus }}</td></tr>
                 <tr><th scope="row">Document Version:</th><td>{{ .DocumentVersioning.DocumentVersion }}</td></tr>
                 <tr><th scope="row">Document Date:</th><td>{{ .DocumentVersioning.DocumentDate }}</td></tr>
                 <tr><th scope="row">Document Stage:</th><td>{{ .DocumentVersioning.DocumentStage }}</td></tr>
-                {{- end }}
                 {{- end }}
             </tbody>
         </table>
@@ -208,7 +206,16 @@
 {{- define "table-of-findings" }}
 {{- if .Findings }}
 <section id="table-of-findings" class="table-of-findings-section" aria-label="Table of Findings">
-    <h1>Findings Table</h1> 
+    <h1>Findings Tables</h1>
+{{- $currentDir := "" }}
+{{- range .Findings }}
+{{- if ne .Directory $currentDir }}
+{{- if $currentDir }}
+        </tbody>
+    </table>
+{{- end }}
+{{- $currentDir = .Directory }}
+    <h2>{{ .Directory }}</h2>
     <table role="table">
         <thead>
             <tr>
@@ -219,14 +226,14 @@
             </tr>
         </thead>
         <tbody>
-            {{- range .Findings }}
+{{- end }}
             <tr>
                 <td><a href="#{{ .Headers.FindingName }}" aria-label="Navigate to detailed finding {{ .Headers.FindingID }}">{{ .Headers.FindingID }}</a></td>
                 <td class="finding-table-name">{{ .Headers.FindingTitle }}</td>
                 <td class="finding-status" data-status="{{ .Headers.FindingStatus }}">{{ .Headers.FindingStatus }}</td>
                 <td class="finding-severity" data-severity="{{ .Headers.FindingSeverity }}"> {{ .Headers.FindingSeverity }} </td>
             </tr>
-            {{- end }}
+{{- end }}
         </tbody>
     </table>
     <div class="page-break"></div>
@@ -238,7 +245,16 @@
 {{- define "table-of-suggestions" }}
 {{- if .Suggestions }}
 <section id="table-of-suggestions" class="table-of-suggestions-section" aria-label="Table of Suggestions">
-    <h1>Suggestions Table</h1> 
+    <h1>Suggestions Tables</h1>
+{{- $currentDir := "" }}
+{{- range .Suggestions }}
+{{- if ne .Directory $currentDir }}
+{{- if $currentDir }}
+        </tbody>
+    </table>
+{{- end }}
+{{- $currentDir = .Directory }}
+    <h2>{{ .Directory }}</h2>
     <table role="table">
         <thead>
             <tr>
@@ -248,13 +264,13 @@
             </tr>
         </thead>
         <tbody>
-            {{- range .Suggestions }}
+{{- end }}
             <tr>
                 <td><a href="#{{ .Headers.SuggestionName }}" aria-label="Navigate to detailed suggestion {{ .Headers.SuggestionID }}">{{ .Headers.SuggestionID }}</a></td>
                 <td class="suggestion-table-name">{{ .Headers.SuggestionTitle }}</td>
                 <td class="suggestions-status" data-status="{{ .Headers.SuggestionStatus }}">{{ .Headers.SuggestionStatus }}</td>
             </tr>
-            {{- end }}
+{{- end }}
         </tbody>
     </table>
     <div class="page-break"></div>
@@ -271,7 +287,7 @@
         <thead>
             <tr>
                 <th scope="col"></th>
-                {{- if $.SeverityConfig.FlipSeverityMatrix }}
+                {{- if $.SeverityConfig.SwapImpactLikelihoodAxis }}
                     {{- range .SeverityConfig.Impacts }}<th scope="col">{{ . }}</th>{{- end }}
                 {{- else }}
                     {{- range .SeverityConfig.Likelihoods }}<th scope="col">{{ . }}</th>{{- end }}
@@ -282,7 +298,7 @@
             {{- range $rowIndex, $intersections := .SeverityMatrix.Matrix }}
             <tr>
                 <th scope="row">
-                    {{- if $.SeverityConfig.FlipSeverityMatrix }}
+                    {{- if $.SeverityConfig.SwapImpactLikelihoodAxis }}
                         {{- index $.SeverityConfig.Likelihoods $rowIndex }}
                     {{- else }}
                         {{- index $.SeverityConfig.Impacts $rowIndex }}
@@ -324,11 +340,6 @@
             <span class="label">{{ . }} {{ $count }}/{{ $.SeverityBarGraph.Total }}</span>
         </div>
         {{- end }}
-        
-        <div class="bar-container-vertical">
-            <meter class="bar finding-status" data-status="Resolved" value="{{ .SeverityBarGraph.Resolved }}" max="{{ .SeverityBarGraph.Total }}" aria-label="Resolved: {{ .SeverityBarGraph.Resolved }} of {{ .SeverityBarGraph.Total }} findings"></meter>
-            <span class="label">Resolved {{ .SeverityBarGraph.Resolved }}/{{ .SeverityBarGraph.Total }}</span>
-        </div>
     </div>
     <div class="page-break"></div>
 </section>
@@ -435,11 +446,9 @@
 <!-- Document Status Indicator Template -->
 {{- define "document-status-indicator" }}
 {{- if .MetadataConfig }}
-{{- range .MetadataConfig.DocumentInformation }}
-{{- if .DocumentCurrent }}
+{{- with index .MetadataConfig.DocumentInformation (sub (len .MetadataConfig.DocumentInformation) 1) }}
 {{- if eq .DocumentVersioning.DocumentStatus "Draft" }}
 <p class="AE3CEE3B46BEBFFE161D55F7AF5F97F1"></p>
-{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

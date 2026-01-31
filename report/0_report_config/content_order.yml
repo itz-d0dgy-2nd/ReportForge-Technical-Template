@@ -25,3 +25,13 @@ Suggestions:
 # - NOTE: I MADE THIS CASE SENSITIVE
 Risk:
   -
+
+FindingIdentifierPrefixes:
+  Web Application: WEB
+  Mobile Application: MOB
+
+SuggestionIdentifierPrefixes:
+  Web Application: SWEB
+  Mobile Application: SMOB
+
+RiskIdentifierPrefixes:
